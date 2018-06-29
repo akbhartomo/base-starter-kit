@@ -1,0 +1,167 @@
+// Set media query
+@mixin breakpoint($point) {
+  @if $point == desktop_xs {
+     @media (max-width: 1024px) { @content; }
+  }
+  @else if $point == phablet {
+     @media (max-width: 992px) { @content; }
+  }
+  @else if $point == tablet {
+     @media (max-width: 768px) { @content; }
+  }
+  @else if $point == mobile_lg {
+  	 @media (max-width: 640px) { @content; }
+  }
+  @else if $point == mobile_sm {
+     @media (max-width: 375px) { @content; }
+  }
+  @else if $point == mobile_xs {
+     @media (max-width: 320px) { @content; }
+  }
+}
+
+// Set sizing
+$val: (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 40, 45, 50, 55, 60, 63, 65, 70, 75, 77, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 350, 400, 500, 600, 700, 800, 900, auto);
+@mixin generate-utility-size(){
+  @each $num in $val {
+    .u-fz--#{$num} { font-size: #{$num}px !important; }
+    .u-width--#{$num} { width: #{$num}px; }
+    .u-m--#{$num} { margin: #{$num}px; }
+    .u-ma--#{$num} { margin: #{$num}; }
+    .u-mt--#{$num} { margin-top: #{$num}px; }
+    .u-mti--#{$num} { margin-top: #{$num}px !important;}
+    .u-mr--#{$num} { margin-right: #{$num}px; }
+    .u-mb--#{$num} { margin-bottom: #{$num}px; }
+    .u-mbi--#{$num} { margin-bottom: #{$num}px !important; }
+    .u-ml--#{$num} { margin-left: #{$num}px; }
+    .u-mli--#{$num} { margin-left: #{$num}px !important; }
+    .u-p--#{$num} { padding: #{$num}px !important; }
+    .u-pt--#{$num} { padding-top: #{$num}px; }
+    .u-pr--#{$num} { padding-right: #{$num}px !important; }
+    .u-pb--#{$num} { padding-bottom: #{$num}px; }
+    .u-pbi--#{$num} { padding-bottom: #{$num}px !important; }
+    .u-pl--#{$num} { padding-left: #{$num}px !important; }
+    .u-left--#{$num} {left: #{$num} !important; }  
+  }
+}
+@include generate-utility-size();
+
+// Set font weight
+@mixin font-weight($size) {
+  @if $size == strong {
+    font-weight: bold;
+  }
+  @if $size == regular {
+    font-weight: normal;
+  }
+  @if $size == light {
+    font-weight: 100;
+  }
+}
+
+// Set mixin box-shadow
+@mixin box-shadow($top, $left, $blur, $size, $color, $inset: false) {
+  @if $inset {
+    -webkit-box-shadow:inset $top $left $blur $size $color;
+    -moz-box-shadow:inset $top $left $blur $size $color;
+    box-shadow:inset $top $left $blur $size $color;
+  } @else {
+    -webkit-box-shadow: $top $left $blur $size $color;
+    -moz-box-shadow: $top $left $blur $size $color;
+    box-shadow: $top $left $blur $size $color;
+  }
+}
+
+// Generic transform
+@mixin transform($arguments) {
+  -webkit-transform : $arguments;
+  -moz-transform    : $arguments;
+  -ms-transform     : $arguments;
+  -o-transform      : $arguments;
+  transform         : $arguments;
+}
+
+// Rotate
+@mixin rotate ($deg) {
+  @include transform(rotate(#{$deg}deg));
+}
+
+// Scale
+@mixin scale($scale) {
+  @include transform(scale($scale));
+} 
+
+// Translate
+@mixin translate ($x, $y) {
+  @include transform(translate($x, $y));
+}
+
+// Skew
+@mixin skew ($x, $y) {
+  @include transform(skew(#{$x}deg, #{$y}deg));
+}
+
+// Transform origin
+@mixin transform-origin ($origin) {
+  -webkit-transform-origin  : $origin;
+  -moz-transform-origin     : $origin;
+  -ms-transform-origin      : $origin;
+  -o-transform-origin       : $origin;
+  transform-origin          : $origin;
+}
+
+// Set mixins transition
+@mixin transition($transition-property, $transition-time, $method) {
+	-webkit-transition: $transition-property $transition-time $method;
+	-moz-transition: $transition-property $transition-time $method;
+	-ms-transition: $transition-property $transition-time $method;
+	-o-transition: $transition-property $transition-time $method;
+	transition: $transition-property $transition-time $method;
+}
+
+// Set mixin border radius
+@mixin border-radius($value) {
+  -webkit-border-radius: $value;
+  -moz-border-radius: $value;
+  border-radius: $value;
+}
+
+// Set mixin font-size
+@mixin font-size($val) {
+  @if $val == small {
+    font-size: 13px;
+  }
+  @if $val == medium {
+    font-size: 16px;
+  }
+  @if $val == large {
+    font-size: 24px;
+  }
+  @if $val == extralarge {
+    font-size: 28px;
+  }
+}
+
+// Set mixin for conditional element width
+@mixin element-width($elem) {
+  @if $elem == full-width {
+    width: 100%;
+  }
+  @if $elem == inline {
+    width: 49%;
+  }
+}
+
+.opacity--50 {
+  /* Theoretically for IE 8 & 9 (more valid) */
+  /* ...but not required as filter works too */
+  /* should come BEFORE filter */
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; // IE8
+
+  /* This works in IE 8 & 9 too */
+  /* ... but also 5, 6, 7 */
+  filter: alpha(opacity=50); // IE 5-7
+
+  /* Modern Browsers */
+  opacity: 0.5;
+}
