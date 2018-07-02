@@ -5,7 +5,10 @@ const browserSync = require('browser-sync').create();
 const del = require('del');
 const wiredep = require('wiredep').stream;
 const runSequence = require('run-sequence');
-// const webpack = require('webpack-stream');
+const browserify = require('browserify');
+const babelify = require('babelify');
+const buffer = require('vinyl-buffer');
+const source = require('vinyl-source-stream');
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -35,34 +38,29 @@ const runStyles = () => {
 };
 
 const runScripts = () => {
-  return gulp
-    .src('src/scripts/**/*.js')
-    // .pipe(webpack({
-    //   output: {
-    //     filename: '[name].js'
-    //   },
-    //   module: {
-    //     rules: [
-    //       {
-    //         test: /\.js$/,
-    //         exclude: /(node_modules|bower_components)/,
-    //         use: {
-    //           loader: 'babel-loader',
-    //           options: {
-    //             presets: ['env']
-    //           }
-    //         }
-    //       }
-    //     ]
-    //   },
-    //   devtool: '#inline-source-map'
-    // }))
-    .pipe($.plumber())
-    .pipe($.if(dev, $.sourcemaps.init()))
-    .pipe($.babel())
-    .pipe($.if(dev, $.sourcemaps.write('.')))
-    .pipe(gulp.dest('.temp/scripts'))
-    .pipe(reload({ stream: true }));
+  // return gulp
+    // .src('src/scripts/**/*.js')
+    const b = browserify({
+      entries:'src/scripts/main.js',
+      transform: babelify,
+      debug: true
+    })
+
+    return b.bundle()
+      .pipe(source('bundle.js'))
+      .pipe($.plumber())
+      .pipe(buffer())
+      .pipe($.if(dev, $.sourcemaps.init({loadMaps: true})))
+      .pipe($.if(dev, $.sourcemaps.write('.')))
+      .pipe(gulp.dest('.temp/scripts'))
+      .pipe(reload({stream: true}));
+
+    // .pipe($.plumber())
+    // .pipe($.if(dev, $.sourcemaps.init()))
+    // .pipe($.babel())
+    // .pipe($.if(dev, $.sourcemaps.write('.')))
+    // .pipe(gulp.dest('.temp/scripts'))
+    // .pipe(reload({ stream: true }));
 };
 
 const runHtml = () => {
@@ -72,7 +70,7 @@ const runHtml = () => {
       .pipe($.useref({ searchPath: ['.temp', 'src', '.'] }))
       // .pipe($.if('src/scripts/main.js', $.uglify({ compress: { drop_console: false } })))
       // .pipe($.if('src/scripts/**/*.js', $.uglify({ compress: { drop_console: true } })))
-      .pipe($.if(/\.js$/, $.uglify({ compress: { drop_console: true } })))
+      // .pipe($.if(/\.js$/, $.uglify({ compress: { drop_console: true } })))
       .pipe($.if(/\.css$/, $.cssnano({ safe: true, autoprefixer: false })))
       .pipe(
         $.if(
