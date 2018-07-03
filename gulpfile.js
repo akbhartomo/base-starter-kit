@@ -50,8 +50,10 @@ const runScripts = () => {
       .pipe(source('bundle.js'))
       .pipe($.plumber())
       .pipe(buffer())
-      .pipe($.if(dev, $.sourcemaps.init({loadMaps: true})))
-      .pipe($.if(dev, $.sourcemaps.write('.')))
+      // .pipe($.if(dev, $.sourcemaps.init({loadMaps: true})))
+      // .pipe($.if(dev, $.sourcemaps.write('.')))
+      .pipe($.sourcemaps.init({loadMaps: true}))
+      .pipe($.sourcemaps.write('.'))
       .pipe(gulp.dest('.temp/scripts'))
       .pipe(reload({stream: true}));
 
