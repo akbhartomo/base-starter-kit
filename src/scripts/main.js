@@ -1,9 +1,14 @@
 import foo from './foo';
+import component from './components';
 
 const bootstrapFunction = (() => {
   let animateBall = () => {
     foo();
   };
+
+  let rellax = () => {
+    component();
+  }
 
   // Each function want you to create, make it them to be variable functions
   // ES6 supports
@@ -13,15 +18,15 @@ const bootstrapFunction = (() => {
       $('#btnSplendid').css({
         background: '#F55555',
         borderRadius: '10em',
-        border: '1px solid #333'
+        border: 'none'
       });
     }, 1000);
-    console.log('Hello Time Out Button');
   };
 
   let init = () => {
     timeOutButton();
     animateBall();
+    rellax();
     // Grab the functions you want activate
   };
 
